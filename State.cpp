@@ -1,7 +1,8 @@
 #include "State.h"
 
-State::State()
+State::State(sf::RenderTarget* window)
 {
+	this->window = window;
 }
 
 State::~State()
