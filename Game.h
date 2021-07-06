@@ -1,14 +1,19 @@
 #pragma once
 
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-
-#include <SFML/Graphics.hpp>
+#include "State.h"
 
 class Game
 {
 private:
+	//Variables
+	sf::RenderWindow *window;
+	sf::Event sfEvent;
+
+	sf::Clock dtClock;
+	float dt;
+
+	//Initializers
+	void InitWindow();
 
 public:
 	//Constructors and destructors
@@ -16,5 +21,10 @@ public:
 	virtual ~Game();
 
 	//Functions
+	void UpdateDT();
+	void UpdateSFMLEvents();
+	void Update();
+	void Render();
+	void Run();
 };
 
