@@ -50,6 +50,11 @@ Game::~Game()
 }
 
 //Functions
+void Game::endApplication()
+{
+    std::cout << "Ending App" << "\n";
+}
+
 void Game::UpdateDT()
 {
     //Update the dt var with the time it takes to update and render 1 frame
@@ -65,10 +70,6 @@ void Game::UpdateSFMLEvents()
         case sf::Event::Closed:
             this->window->close();
             break;
-        case sf::Event::KeyPressed:
-            if (this->sfEvent.key.code == sf::Keyboard::Escape)
-                this->window->close();
-            break;
         }
     }
    
@@ -78,8 +79,21 @@ void Game::Update()
 {
     this->UpdateSFMLEvents();
 
-    if (!this->states.empty())
+    if (!this->states.empty()) {
         this->states.top()->Update(this->dt);
+
+        if (this->states.top()->getQuit()) {
+            
+            this->states.top()->endState();
+            delete this->states.top();
+            this->states.pop();
+        }
+    }
+    //Application End
+    else {
+        this->endApplication();
+        this->window->close();
+    }
 }
 
 void Game::Render()

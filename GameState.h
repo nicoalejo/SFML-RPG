@@ -12,6 +12,7 @@ public:
 	//Functions
 	void endState();
 
+	void updateKeyBinds(const float& dt);
 	void Update(const float& dt);
 	void Render(sf::RenderTarget* target = nullptr);
 };
