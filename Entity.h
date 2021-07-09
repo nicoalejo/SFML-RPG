@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -15,6 +14,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
+
 class Entity
 {
 private:
