@@ -13,8 +13,6 @@ public:
 	virtual ~GameState();
 
 	//Functions
-	void endState();
-
 	void updateInput(const float& dt);
 	void Update(const float& dt);
 	void Render(sf::RenderTarget* target = nullptr);
