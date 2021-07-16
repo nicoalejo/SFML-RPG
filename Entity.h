@@ -1,19 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <fstream>
-#include <sstream>
-#include <stack>
-#include <map>
-#include <vector>
-
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
+#include "MovementComponent.h"
 
 class Entity
 {
@@ -22,7 +9,8 @@ private:
 protected:
 	sf::Texture* texture;
 	sf::Sprite* sprite;
-	float movementSpeed;
+	
+	MovementComponent* movementComponent;
 
 public:
 	Entity();
@@ -30,6 +18,7 @@ public:
 
 	//Component functions
 	void createSprite(sf::Texture* texture);
+	void createMovementComponent(const float maxVelocity);
 
 	//Functions
 
