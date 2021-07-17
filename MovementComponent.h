@@ -37,6 +37,6 @@ public:
 
 	//Functions
 	void move(const float dirX, const float dirY, const float& dt);
-	void update(const float& dt);
+	void Update(const float& dt);
 };
 

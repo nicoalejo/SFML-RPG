@@ -28,7 +28,7 @@ void MovementComponent::move(const float dirX, const float dirY, const float& dt
 	this->velocity.y += this->acceleration * dirY;	
 }
 
-void MovementComponent::update(const float& dt)
+void MovementComponent::Update(const float& dt)
 {
 	//Decelerates the sprite checking if has reached max velocity
 	
