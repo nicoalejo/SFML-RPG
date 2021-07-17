@@ -25,7 +25,8 @@ void GameState::initTextures()
 
 void GameState::initPlayers()
 {
-	this->player = new Player(0,0, &this->textures["PLAYER_IDLE"]);
+	//Send position x,y and texture
+	this->player = new Player(0,0, this->textures["PLAYER_IDLE"]);
 }
 
 //Constructor / Destructor
