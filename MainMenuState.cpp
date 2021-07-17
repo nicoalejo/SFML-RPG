@@ -38,17 +38,25 @@ void MainMenuState::initKeybinds()
 
 void MainMenuState::initButtons()
 {
-	this->buttons["GAME_STATE"] = new Button(150, 100, 300, 100,
-		&this->font, "New Game",
-		sf::Color(70,70,70,200), sf::Color(150, 150, 150, 255), sf::Color(20, 20, 20, 200));
+	this->buttons["GAME_STATE"] = new Button(150.f, 100.f, 300.f, 100.f,
+		&this->font, "New Game", 50,
+		sf::Color(224, 122, 49, 255), sf::Color(224, 122, 49, 255), sf::Color(224, 122, 49, 200),
+		sf::Color(18, 135, 148, 200), sf::Color(64, 188, 199, 255), sf::Color(18, 135, 148, 200));
 
 	this->buttons["SETTINGS"] = new Button(150, 300, 300, 100,
-		&this->font, "Settings",
-		sf::Color(70, 70, 70, 200), sf::Color(150, 150, 150, 255), sf::Color(20, 20, 20, 200));
+		&this->font, "Settings", 50,
+		sf::Color(224, 122, 49, 255), sf::Color(224, 122, 49, 255), sf::Color(224, 122, 49, 200),
+		sf::Color(18, 135, 148, 200), sf::Color(64, 188, 199, 255), sf::Color(18, 135, 148, 200));
 
-	this->buttons["EXIT_STATE"] = new Button(150, 500, 300, 100,
-		&this->font, "Quit",
-		sf::Color(70, 70, 70, 200), sf::Color(150, 150, 150, 255), sf::Color(20, 20, 20, 200));
+	this->buttons["EDITOR_STATE"] = new Button(150, 500, 300, 100,
+		&this->font, "Editor", 50,
+		sf::Color(224, 122, 49, 255), sf::Color(224, 122, 49, 255), sf::Color(224, 122, 49, 200),
+		sf::Color(18, 135, 148, 200), sf::Color(64, 188, 199, 255), sf::Color(18, 135, 148, 200));
+
+	this->buttons["EXIT_STATE"] = new Button(150, 700, 300, 100,
+		&this->font, "Quit", 50,
+		sf::Color(224, 122, 49, 255), sf::Color(224, 122, 49, 255), sf::Color(224, 122, 49, 200),
+		sf::Color(18, 135, 148, 200), sf::Color(64, 188, 199, 255), sf::Color(18, 135, 148, 200));
 }
 
 MainMenuState::MainMenuState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
