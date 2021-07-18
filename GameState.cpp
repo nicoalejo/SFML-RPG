@@ -18,15 +18,15 @@ void GameState::initKeybinds()
 
 void GameState::initTextures()
 {	
-	if (!this->textures["PLAYER_IDLE"].loadFromFile("Resources/Images/Sprites/Player/test.png")) {
-		throw "ERROR::GAME_STATE::COULD NOT LOAD PLAYER IDLE TEXTURE";
+	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/necromancer_walk_1.png")) {
+		throw "ERROR::GAME_STATE::COULD NOT LOAD PLAYER TEXTURE";
 	}
 }
 
 void GameState::initPlayers()
 {
 	//Send position x,y and texture
-	this->player = new Player(0,0, this->textures["PLAYER_IDLE"]);
+	this->player = new Player(0,0, this->textures["PLAYER_SHEET"]);
 }
 
 //Constructor / Destructor
