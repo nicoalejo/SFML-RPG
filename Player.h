@@ -5,7 +5,7 @@ class Player :
 {
 private:
     //Variables
-    
+    int sprite_size;
 
     //Initializer Functions
     void initVariables();

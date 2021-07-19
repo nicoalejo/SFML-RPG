@@ -18,7 +18,7 @@ void GameState::initKeybinds()
 
 void GameState::initTextures()
 {	
-	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/PLAYER_SHEET.png")) {
+	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/enemy_walk_128_2.png")) {
 		throw "ERROR::GAME_STATE::COULD NOT LOAD PLAYER TEXTURE";
 	}
 }
@@ -71,6 +71,6 @@ void GameState::Render(sf::RenderTarget* target)
 	if (!target)
 		target = this->window;
 
-	this->player->Render(target);
+	this->player->Render(*target);
 	
 }
