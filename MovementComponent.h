@@ -15,6 +15,14 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
+enum movement_states {
+	NOT_MOVING = 0,
+	MOVING_LEFT,
+	MOVING_RIGHT,
+	MOVING_UP,
+	MOVING_DOWN
+};
+
 class MovementComponent
 {
 private:
@@ -36,6 +44,8 @@ public:
 	const sf::Vector2f& getVelocity() const;
 
 	//Functions
+	const bool getState(const short unsigned state) const;
+
 	void move(const float dirX, const float dirY, const float& dt);
 	void Update(const float& dt);
 };
