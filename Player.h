@@ -6,6 +6,7 @@ class Player :
 private:
     //Variables
     int sprite_size;
+    float walkVelocity;
 
     //Initializer Functions
     void initVariables();
