@@ -15,6 +15,19 @@ AnimationComponent::~AnimationComponent()
 	}
 }
 
+//Accesors
+const bool& AnimationComponent::isDone(const std::string key)
+{
+	return this->animations[key]->isDone();
+}
+
+bool AnimationComponent::checkCurrentAnimation(const std::string key)
+{
+	return this->lastAnimation == this->animations[key];
+}
+
+
+
 //Functions
 
 void AnimationComponent::addAnimation(const std::string key, float animation_timer, 
@@ -36,7 +49,7 @@ void AnimationComponent::checkLastAnimation(const std::string key)
 	}
 }
 
-void AnimationComponent::play(const std::string key, const float& dt, const bool priority)
+const bool& AnimationComponent::play(const std::string key, const float& dt, const bool priority)
 {
 	//If a priority animation needs to be played
 	if (this->priorityAnimation) {
@@ -55,9 +68,10 @@ void AnimationComponent::play(const std::string key, const float& dt, const bool
 		this->animations[key]->play(dt);
 	}
 	
+	return this->animations[key]->isDone();
 }
 
-void AnimationComponent::play(const std::string key, const float& dt, const float& modifier, 
+const bool& AnimationComponent::play(const std::string key, const float& dt, const float& modifier,
 	const float& modifier_max, const bool priority)
 {
 	if (this->priorityAnimation) {
@@ -74,7 +88,8 @@ void AnimationComponent::play(const std::string key, const float& dt, const floa
 		checkLastAnimation(key);
 		this->animations[key]->play(dt, abs(modifier / modifier_max));
 	}
-	
+
+	return this->animations[key]->isDone();	
 }
 
 
