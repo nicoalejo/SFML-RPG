@@ -3,8 +3,9 @@
 //Initializer Functions
 void Player::initVariables()
 {
-	sprite_size = 128;
-	walkVelocity = 10.f;
+	this->sprite_size = 128;
+	this->walkVelocity = 10.f;
+	this->attacking = false;
 }
 
 void Player::initComponents()
@@ -45,6 +46,12 @@ void Player::Update(const float& dt)
 {
 	this->movementComponent->Update(dt);
 
+	/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		this->attacking = true;
+		this->animationComponent->play("ATTACK_RIGHT", dt, true);
+	}
+		
+	if(this->attacking)*/
 	if(this->movementComponent->getState(NOT_MOVING))
 		this->animationComponent->play("IDLE", dt);
 	else if(this->movementComponent->getState(MOVING_LEFT))

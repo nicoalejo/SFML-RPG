@@ -26,19 +26,7 @@ void AnimationComponent::addAnimation(const std::string key, float animation_tim
 		frames_x, frames_y, width, height);
 }
 
-void AnimationComponent::play(const std::string key, const float& dt, const bool priority)
-{
-	if (this->lastAnimation != this->animations[key]) {
-		if (this->lastAnimation != nullptr) {
-			this->lastAnimation->reset();
-		}					
-		this->lastAnimation = this->animations[key];		
-	}
-	this->animations[key]->play(dt);
-}
-
-void AnimationComponent::play(const std::string key, const float& dt, const float& modifier, 
-	const float& modifier_max, const bool priority)
+void AnimationComponent::checkLastAnimation(const std::string key)
 {
 	if (this->lastAnimation != this->animations[key]) {
 		if (this->lastAnimation != nullptr) {
@@ -46,7 +34,47 @@ void AnimationComponent::play(const std::string key, const float& dt, const floa
 		}
 		this->lastAnimation = this->animations[key];
 	}
-	this->animations[key]->play(dt, abs(modifier / modifier_max));
+}
+
+void AnimationComponent::play(const std::string key, const float& dt, const bool priority)
+{
+	//If a priority animation needs to be played
+	if (this->priorityAnimation) {
+		if (this->priorityAnimation == this->animations[key]) {
+			checkLastAnimation(key);
+			//If the priority animation is done remove it
+			if (this->animations[key]->play(dt))
+				this->priorityAnimation = nullptr;
+		}
+	}
+	else {
+		if (priority)
+			this->priorityAnimation = this->animations[key];
+
+		checkLastAnimation(key);
+		this->animations[key]->play(dt);
+	}
+	
+}
+
+void AnimationComponent::play(const std::string key, const float& dt, const float& modifier, 
+	const float& modifier_max, const bool priority)
+{
+	if (this->priorityAnimation) {
+		if (this->priorityAnimation == this->animations[key]) {
+			checkLastAnimation(key);
+			if(this->animations[key]->play(dt, abs(modifier / modifier_max)))
+				this->priorityAnimation = nullptr;
+		}
+	}
+	else {
+		if (priority) 
+			this->priorityAnimation = this->animations[key];
+		
+		checkLastAnimation(key);
+		this->animations[key]->play(dt, abs(modifier / modifier_max));
+	}
+	
 }
 
 

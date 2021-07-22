@@ -7,6 +7,7 @@ private:
     //Variables
     int sprite_size;
     float walkVelocity;
+    bool attacking;
 
     //Initializer Functions
     void initVariables();
