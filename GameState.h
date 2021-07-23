@@ -1,15 +1,18 @@
 #pragma once
 #include "State.h"
+#include "MapGenerator.h"
 
 class GameState : public State
 {
-private:
+private:	
 	Player* player;
+	MapGenerator* newMap;
 
 	//Initializer Functions
 	void initKeybinds();
 	void initTextures();
 	void initPlayers();
+	void initMap();
 public:
 	GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
 	virtual ~GameState();

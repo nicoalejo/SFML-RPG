@@ -22,6 +22,9 @@
     <Filter Include="Component">
       <UniqueIdentifier>{da05134a-8198-4b9f-af59-5168f0749041}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{10d9d008-2143-4d12-9e76-0f56c077f426}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,6 +63,9 @@
     <ClCompile Include="HitBoxComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="MapGenerator.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="HitBoxComponent.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MapGenerator.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

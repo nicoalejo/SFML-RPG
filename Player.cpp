@@ -80,10 +80,7 @@ void Player::attackAnimation(const float& dt)
 			this->animationComponent->checkCurrentAnimation("ATTACK_DOWN")) {
 			if (this->animationComponent->play("ATTACK_DOWN", dt, true))
 				this->attacking = false;
-		}
-		/*else {
-			this->attacking = false;
-		}*/					
+		}			
 	}
 
 }
