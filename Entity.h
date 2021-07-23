@@ -3,6 +3,7 @@
 #include "MovementComponent.h"
 #include "AnimationComponent.h"
 #include "HitBoxComponent.h"
+#include "AudioComponent.h"
 
 class Entity
 {
@@ -14,6 +15,7 @@ protected:
 	HitBoxComponent* hitboxComponent;
 	MovementComponent* movementComponent;
 	AnimationComponent* animationComponent;
+	AudioComponent* audioComponent;
 
 public:
 	Entity();
@@ -25,6 +27,7 @@ public:
 	void createAnimationComponent(sf::Texture& texture_sheet);
 	void createHitboxComponent(sf::Sprite& sprite, const float offset_x, const float offset_y, 
 		float width, float height);
+	void createAudioComponent(const std::string& audio_location);
 
 	//Functions
 

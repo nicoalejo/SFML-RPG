@@ -59,6 +59,13 @@ void MainMenuState::initButtons()
 		sf::Color(18, 135, 148, 200), sf::Color(64, 188, 199, 255), sf::Color(18, 135, 148, 200));
 }
 
+void MainMenuState::initMusic()
+{
+	if (!this->backgroundMusic.openFromFile("Resources/Sounds/Music/intro.ogg"))
+		throw "ERROR::MAINMENUSTATE::UNABLE_TO_LOAD_BACKGROUND_MUSIC";	
+
+}
+
 MainMenuState::MainMenuState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
 	:State(window, supportedKeys, states)
 {
@@ -67,6 +74,7 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::map<std::string, int
 	this->initFonts();
 	this->initKeybinds();
 	this->initButtons();	
+	this->initMusic();
 }
 
 MainMenuState::~MainMenuState()
@@ -74,6 +82,14 @@ MainMenuState::~MainMenuState()
 	for (auto it = this->buttons.begin(); it != this->buttons.end(); ++it) {
 		delete it->second;
 	}
+}
+
+//Functions
+
+void MainMenuState::playMusic()
+{
+	if (this->backgroundMusic.getStatus() == backgroundMusic.Stopped)
+		this->backgroundMusic.play();
 }
 
 void MainMenuState::updateInput(const float& dt)
@@ -91,7 +107,8 @@ void MainMenuState::updateButtons()
 
 	//New game
 	if (this->buttons["GAME_STATE"]->isPressed()) {
-		this->states->push(new GameState(this->window, this->supportedKeys, this->states));
+		backgroundMusic.stop();
+		this->states->push(new GameState(this->window, this->supportedKeys, this->states));		
 	}
 	
 	//Editor State
@@ -107,6 +124,7 @@ void MainMenuState::updateButtons()
 
 void MainMenuState::Update(const float& dt)
 {
+	this->playMusic();
 	this->updateMousePosition();
 	this->updateInput(dt);
 

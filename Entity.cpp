@@ -18,6 +18,7 @@ Entity::~Entity()
 	delete this->movementComponent;
 	delete this->animationComponent;
 	delete this->hitboxComponent;
+	delete this->audioComponent;
 }
 
 //Component functions
@@ -40,6 +41,10 @@ void Entity::createHitboxComponent(sf::Sprite& sprite, const float offset_x, con
 	float width, float height)
 {
 	this->hitboxComponent = new HitBoxComponent(this->sprite, offset_x, offset_y, width, height);
+}
+void Entity::createAudioComponent(const std::string& audio_location)
+{
+	this->audioComponent = new AudioComponent(audio_location);
 }
 //Functions
 

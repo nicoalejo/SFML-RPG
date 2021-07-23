@@ -24,6 +24,7 @@ Player::Player(float x, float y, sf::Texture& texture_sheet)
 	this->createHitboxComponent(this->sprite,32.f,32.f, 64.f, 64.f);
 	this->createMovementComponent(300.f, 15.f, 5.f);
 	this->createAnimationComponent(texture_sheet);
+	this->createAudioComponent("Resources/Sounds/SFX/sword.ogg");
 
 	//Movement Animations
 	this->animationComponent->addAnimation("IDLE", 15.f, 0, 0, 3, 0, sprite_size, sprite_size);
@@ -49,38 +50,32 @@ Player::~Player()
 void Player::updateAttack()
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-		this->attacking = true;
+		this->attacking = true;	
+		if (this->audioComponent->getSound().getStatus() == audioComponent->getSound().Stopped)
+			this->audioComponent->playSound();
 	}
 }
 
+bool Player::checkAndPlayAttackAnimation(const float& dt, const std::string keyMovement,
+	const std::string keyAttack)
+{	
+	if (this->animationComponent->checkCurrentAnimation(keyMovement) ||
+		this->animationComponent->checkCurrentAnimation(keyAttack)) {
+		if (this->animationComponent->play(keyAttack, dt, true)) {
+			this->attacking = false;			
+		}			
+		return true;
+	}
+	return false;
+}
 void Player::attackAnimation(const float& dt)
 {
 	if (this->attacking) {
-		if (this->animationComponent->checkCurrentAnimation("IDLE") ||
-			this->animationComponent->checkCurrentAnimation("ATTACK_RIGHT")) {
-			if (this->animationComponent->play("ATTACK_RIGHT", dt, true))
-				this->attacking = false;
-		}
-		else if (this->animationComponent->checkCurrentAnimation("WALK_LEFT") ||
-			this->animationComponent->checkCurrentAnimation("ATTACK_LEFT")) {
-			if (this->animationComponent->play("ATTACK_LEFT", dt, true))
-				this->attacking = false;
-		}
-		else if (this->animationComponent->checkCurrentAnimation("WALK_RIGHT") || 
-			this->animationComponent->checkCurrentAnimation("ATTACK_RIGHT")) {
-			if (this->animationComponent->play("ATTACK_RIGHT", dt, true))
-			this->attacking = false;
-		}
-		else if (this->animationComponent->checkCurrentAnimation("WALK_UP") ||
-			this->animationComponent->checkCurrentAnimation("ATTACK_UP")) {
-			if (this->animationComponent->play("ATTACK_UP", dt, true))
-				this->attacking = false;
-		}
-		else if (this->animationComponent->checkCurrentAnimation("WALK_DOWN") ||
-			this->animationComponent->checkCurrentAnimation("ATTACK_DOWN")) {
-			if (this->animationComponent->play("ATTACK_DOWN", dt, true))
-				this->attacking = false;
-		}			
+		if (!checkAndPlayAttackAnimation(dt, "IDLE", "ATTACK_RIGHT"))
+			if (!checkAndPlayAttackAnimation(dt, "WALK_LEFT", "ATTACK_LEFT"))
+				if (!checkAndPlayAttackAnimation(dt, "WALK_RIGHT", "ATTACK_RIGHT"))
+					if (!checkAndPlayAttackAnimation(dt, "WALK_UP", "ATTACK_UP"))
+						checkAndPlayAttackAnimation(dt, "WALK_DOWN", "ATTACK_DOWN");	
 	}
 
 }
@@ -101,6 +96,8 @@ void Player::updateAnimation(const float& dt)
 		this->animationComponent->play("WALK_UP", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
 
 }
+
+
 
 void Player::Update(const float& dt)
 {

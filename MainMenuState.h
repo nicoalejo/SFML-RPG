@@ -11,6 +11,7 @@ private:
 	sf::Texture backgroundTexture;
 	sf::RectangleShape background;
 	sf::Font font;
+	sf::Music backgroundMusic;
 
 	std::map<std::string, Button*> buttons;
 
@@ -20,6 +21,7 @@ private:
 	void initFonts();
 	void initKeybinds();
 	void initButtons();
+	void initMusic();
 
 public:
 	MainMenuState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
@@ -27,6 +29,7 @@ public:
 
 	//Functions
 
+	void playMusic();
 	void updateInput(const float& dt);
 	void updateButtons();
 	void Update(const float& dt);
