@@ -7,8 +7,10 @@
 class MapGenerator
 {
 private:
-	sf::VertexArray m_vertices;
 	sf::Texture m_tileset;
+	sf::Sprite map_sprite[150];
+	int width;
+	int height;
 
 public:
 	//Constructors
@@ -17,9 +19,10 @@ public:
 
 	//Functions
 	bool load(const std::string& tileset, sf::Vector2u tileSize,
-		const int* tiles, unsigned int width, unsigned int height);
+		const int* tiles, int width, int height);
+	void setPosition(const int x, const int y, sf::Sprite& sprite);
+	void setTexture(sf::Texture& texture, sf::Sprite& sprite, sf::IntRect rectDimension);
 
-	void Update(const float& dt);
 	void Render(sf::RenderTarget& target);
 };
 
