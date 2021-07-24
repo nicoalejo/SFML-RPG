@@ -18,7 +18,7 @@ void GameState::initKeybinds()
 
 void GameState::initTextures()
 {		
-	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/enemy_walk_128_3.png")) {
+	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/necromancer_spritesheet.png")) {
 		throw "ERROR::GAME_STATE::COULD NOT LOAD PLAYER TEXTURE";
 	}
 	if (!this->textures["ENEMY_SHEET"].loadFromFile("Resources/Images/Sprites/Player/enemy_walk_128_3.png")) {
@@ -92,6 +92,9 @@ void GameState::updateInput(const float& dt)
 
 void GameState::Update(const float& dt)
 {
+	if (player->getAttributeComponent()->isDead())
+		std::cout << "Muerto" << "\n";
+
 	this->updateMousePosition();
 	this->updateInput(dt);
 	this->player->Update(dt);

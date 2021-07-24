@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AttributeComponent.h"
 #include "MovementComponent.h"
 #include "AnimationComponent.h"
 #include "HitBoxComponent.h"
@@ -16,6 +17,7 @@ protected:
 	MovementComponent* movementComponent;
 	AnimationComponent* animationComponent;
 	AudioComponent* audioComponent;
+	AttributeComponent* attributeComponent;
 
 public:
 	Entity();
@@ -28,9 +30,12 @@ public:
 	void createHitboxComponent(sf::Sprite& sprite, const float offset_x, const float offset_y, 
 		float width, float height);
 	void createAudioComponent(const std::string& audio_location);
+	void createAttributeComponent(const int health, const int attack, const int points);
 
 	//Functions
 
+	float calculateDistancePlayer(const sf::Vector2f& source);
+	sf::Vector2f normalize(const sf::Vector2f& source);
 	virtual sf::Vector2f getPosition();
 	virtual void setPosition(const float x, const float y);
 	virtual void move(const float dir_x, const float dir_y, const float& dt);

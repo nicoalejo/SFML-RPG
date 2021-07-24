@@ -14,15 +14,13 @@ class Enemy :
 
         //Initializer Functions
         void initVariables();
-        void initComponents();
+        void initComponents(sf::Texture& texture_sheet);
 
     public:
         Enemy(float x, float y, sf::Texture& texture_sheet, Player* player);
         virtual ~Enemy();
 
         //Functions   
-        float calculateDistancePlayer();
-        sf::Vector2f normalize(const sf::Vector2f& source);
         void updateAttack(const float& dt);
         bool checkAndPlayAttackAnimation(const float& dt, const std::string keyMovement,
             const std::string keyAttack);

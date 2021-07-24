@@ -8,37 +8,68 @@ void Player::initVariables()
 	this->attacking = false;
 }
 
-void Player::initComponents()
+void Player::initComponents(sf::Texture& texture_sheet)
 {
+	//Create Components
+	this->createHitboxComponent(this->sprite,32.f,32.f, 64.f, 64.f);
+	this->createMovementComponent(300.f, 15.f, 5.f);
+	this->createAnimationComponent(texture_sheet);
+	this->createAudioComponent("Resources/Sounds/SFX/sword.ogg");
 
+	std::string healthLine = "";
+	int health = 0;
+	int attack = 0;
+	int points = 0;
 
+	std::ifstream ifs("Config/attributes_player.ini");
+	if (ifs.is_open()) {
+		std::getline(ifs, healthLine);
+		ifs >> attack;
+		ifs >> points;
+		health = stoi(healthLine);		
+	}	
+	ifs.close();
+
+	this->createAttributeComponent(health, attack, points);
+
+}
+
+void Player::initUI()
+{
+	if (!this->font.loadFromFile("Fonts/Enchanted-Land.otf")) {
+		throw("ERROR::MAINMENUSTATE::Could not load font");
+	}
+
+	this->healthText.setFont(this->font);
+	this->healthText.setString("HP: " + std::to_string(attributeComponent->getCurrentHP())
+		+ "/" + std::to_string(attributeComponent->getMaxHP()));
+	this->healthText.setFillColor(sf::Color::Green);
+	this->healthText.setCharacterSize(50);
+	this->healthText.setPosition(10, 1015);	 
 }
 
 //Constructors / Destructors
 Player::Player(float x, float y, sf::Texture& texture_sheet)
 {
 	this->initVariables();	
-	
-	this->setPosition(x, y);
+	this->initComponents(texture_sheet);
+	this->initUI();
 
-	this->createHitboxComponent(this->sprite,32.f,32.f, 64.f, 64.f);
-	this->createMovementComponent(300.f, 15.f, 5.f);
-	this->createAnimationComponent(texture_sheet);
-	this->createAudioComponent("Resources/Sounds/SFX/sword.ogg");
+	this->setPosition(x, y);
 
 	//Movement Animations
 	this->animationComponent->addAnimation("IDLE", 15.f, 0, 0, 3, 0, sprite_size, sprite_size);
-	this->animationComponent->addAnimation("WALK_RIGHT", walkVelocity, 0, 5, 3, 5, sprite_size, sprite_size);
-	this->animationComponent->addAnimation("WALK_LEFT", walkVelocity, 0, 6, 3, 6, sprite_size, sprite_size);
-	this->animationComponent->addAnimation("WALK_DOWN", walkVelocity, 0, 3, 3, 3, sprite_size, sprite_size);
-	this->animationComponent->addAnimation("WALK_UP", walkVelocity, 0, 1, 3, 1, sprite_size, sprite_size);
+	this->animationComponent->addAnimation("WALK_RIGHT", walkVelocity, 0, 5, 7, 5, sprite_size, sprite_size);
+	this->animationComponent->addAnimation("WALK_LEFT", walkVelocity, 0, 6, 7, 6, sprite_size, sprite_size);
+	this->animationComponent->addAnimation("WALK_DOWN", walkVelocity, 0, 3, 7, 3, sprite_size, sprite_size);
+	this->animationComponent->addAnimation("WALK_UP", walkVelocity, 0, 1, 7, 1, sprite_size, sprite_size);
 
 	//Attack Animations
 	/*Check for last movement animation to display the right attack*/
-	this->animationComponent->addAnimation("ATTACK_RIGHT", 10.f, 0, 12, 4, 12, sprite_size, sprite_size);
-	this->animationComponent->addAnimation("ATTACK_LEFT", 10.f, 0, 13, 4, 13, sprite_size, sprite_size);
-	this->animationComponent->addAnimation("ATTACK_DOWN", 10.f, 0, 10, 4, 10, sprite_size, sprite_size);
-	this->animationComponent->addAnimation("ATTACK_UP", 10.f, 0, 15, 4, 15, sprite_size, sprite_size);
+	this->animationComponent->addAnimation("ATTACK_RIGHT", 10.f, 0, 12, 7, 12, sprite_size, sprite_size);
+	this->animationComponent->addAnimation("ATTACK_LEFT", 10.f, 0, 13, 7, 13, sprite_size, sprite_size);
+	this->animationComponent->addAnimation("ATTACK_DOWN", 10.f, 0, 10, 7, 10, sprite_size, sprite_size);
+	this->animationComponent->addAnimation("ATTACK_UP", 10.f, 0, 15, 7, 15, sprite_size, sprite_size);
 }
 
 Player::~Player()
@@ -80,6 +111,11 @@ void Player::attackAnimation(const float& dt)
 
 }
 
+AttributeComponent* Player::getAttributeComponent()
+{
+	return attributeComponent;
+}
+
 void Player::updateAnimation(const float& dt)
 {
 	this->attackAnimation(dt);
@@ -98,6 +134,12 @@ void Player::updateAnimation(const float& dt)
 }
 
 
+void Player::updateUI() 
+{
+	this->healthText.setString("HP: " + std::to_string(attributeComponent->getCurrentHP())
+		+ "/" + std::to_string(attributeComponent->getMaxHP()));
+}
+
 
 void Player::Update(const float& dt)
 {
@@ -108,4 +150,16 @@ void Player::Update(const float& dt)
 	this->updateAnimation(dt);
 
 	this->hitboxComponent->Update();
+
+	this->updateUI();
+}
+
+void Player::Render(sf::RenderTarget& target)
+{
+	target.draw(this->sprite);
+	target.draw(this->healthText);
+
+	if (this->hitboxComponent) {
+		this->hitboxComponent->Render(target);
+	}
 }

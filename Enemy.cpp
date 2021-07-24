@@ -5,12 +5,32 @@ void Enemy::initVariables()
 {
 	this->sprite_size = 128;
 	this->walkVelocity = 10.f;
-	this->attacking = false;
+	this->attacking = false;	
 }
 
-void Enemy::initComponents()
+void Enemy::initComponents(sf::Texture& texture_sheet)
 {
+	//Create Components
+	this->createHitboxComponent(this->sprite, 32.f, 32.f, 64.f, 64.f);
+	this->createMovementComponent(200.f, 15.f, 5.f);
+	this->createAnimationComponent(texture_sheet);
+	this->createAudioComponent("Resources/Sounds/SFX/sword.ogg");
 
+	std::string healthLine = "";
+	int health = 0;
+	int attack = 0;
+	int points = 0;
+
+	std::ifstream ifs("Config/attributes_enemy.ini");
+	if (ifs.is_open()) {
+		std::getline(ifs, healthLine);
+		ifs >> attack;
+		ifs >> points;
+		health = stoi(healthLine);		
+	}
+	ifs.close();
+
+	this->createAttributeComponent(health, attack, points);	
 
 }
 
@@ -19,13 +39,10 @@ Enemy::Enemy(float x, float y, sf::Texture& texture_sheet, Player* player) :
 	player(player)
 {
 	this->initVariables();
+	this->initComponents(texture_sheet);
 
 	this->setPosition(x, y);
 
-	this->createHitboxComponent(this->sprite, 32.f, 32.f, 64.f, 64.f);
-	this->createMovementComponent(200.f, 15.f, 5.f);
-	this->createAnimationComponent(texture_sheet);
-	this->createAudioComponent("Resources/Sounds/SFX/sword.ogg");
 
 	//Movement Animations
 	this->animationComponent->addAnimation("IDLE", 15.f, 0, 0, 3, 0, sprite_size, sprite_size);
@@ -48,28 +65,11 @@ Enemy::~Enemy()
 
 //Functions
 
-float Enemy::calculateDistancePlayer()
-{
-	float distx = player->getPosition().x - this->sprite.getPosition().x;
-	float disty = player->getPosition().y - this->sprite.getPosition().y;
-
-	return  sqrt((distx * distx) + (disty * disty));
-}
-
-sf::Vector2f Enemy::normalize(const sf::Vector2f& source)
-{
-	float distance = sqrt((source.x * source.x) + (source.y * source.y));
-	if (distance != 0)
-		return sf::Vector2f(source.x / distance, source.y / distance);
-	else
-		return source;
-}
-
 void Enemy::updateAttack(const float& dt)
 {			
 	sf::Vector2f direction = normalize(player->getPosition() - this->sprite.getPosition());
 
-	float distance = calculateDistancePlayer();
+	float distance = calculateDistancePlayer(player->getPosition());
 	if (distance < 300.f && distance > 100.f)
 		this->movementComponent->move(direction.x, direction.y, dt);
 	else if (distance <= 100.f)
@@ -85,6 +85,7 @@ bool Enemy::checkAndPlayAttackAnimation(const float& dt, const std::string keyMo
 	if (this->animationComponent->checkCurrentAnimation(keyMovement) ||
 		this->animationComponent->checkCurrentAnimation(keyAttack)) {
 		if (this->animationComponent->play(keyAttack, dt, true)) {
+			this->player->getAttributeComponent()->reduceHealth(this->attributeComponent->getAttack());
 			this->attacking = false;
 		}
 		return true;

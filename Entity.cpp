@@ -19,6 +19,7 @@ Entity::~Entity()
 	delete this->animationComponent;
 	delete this->hitboxComponent;
 	delete this->audioComponent;
+	delete this->attributeComponent;
 }
 
 //Component functions
@@ -46,7 +47,28 @@ void Entity::createAudioComponent(const std::string& audio_location)
 {
 	this->audioComponent = new AudioComponent(audio_location);
 }
+void Entity::createAttributeComponent(const int health, const int attack, const int points)
+{
+	this->attributeComponent = new AttributeComponent(health, attack, points);
+}
 //Functions
+
+float Entity::calculateDistancePlayer(const sf::Vector2f& source)
+{
+	float distx = source.x - sprite.getPosition().x;
+	float disty = source.y - sprite.getPosition().y;
+
+	return sqrt((distx * distx) + (disty * disty));
+}
+
+sf::Vector2f Entity::normalize(const sf::Vector2f& source)
+{
+	float distance = sqrt((source.x * source.x) + (source.y * source.y));
+	if (distance != 0)
+		return sf::Vector2f(source.x / distance, source.y / distance);
+	else
+		return source;
+}
 
 sf::Vector2f Entity::getPosition()
 {	

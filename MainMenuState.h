@@ -28,7 +28,7 @@ public:
 	virtual ~MainMenuState();
 
 	//Functions
-
+	
 	void playMusic();
 	void updateInput(const float& dt);
 	void updateButtons();

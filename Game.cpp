@@ -55,12 +55,6 @@ void Game::initKeys()
         }
     }       
     ifs.close();
-
-    //Debug Remove
-    for (auto i: this->supportedKeys)
-    {
-        std::cout << i.first << " " << i.second << "\n";
-    }
 }
 
 void Game::initStates()
