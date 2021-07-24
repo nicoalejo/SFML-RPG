@@ -8,7 +8,7 @@ void Enemy::initVariables()
 	this->attacking = false;	
 }
 
-void Enemy::initComponents(sf::Texture& texture_sheet)
+void Enemy::initComponents(sf::Texture& texture_sheet, std::string configFile)
 {
 	//Create Components
 	this->createHitboxComponent(this->sprite, 32.f, 32.f, 64.f, 64.f);
@@ -21,7 +21,7 @@ void Enemy::initComponents(sf::Texture& texture_sheet)
 	int attack = 0;
 	int points = 0;
 
-	std::ifstream ifs("Config/attributes_enemy.ini");
+	std::ifstream ifs(configFile);
 	if (ifs.is_open()) {
 		std::getline(ifs, healthLine);
 		ifs >> attack;
@@ -35,11 +35,11 @@ void Enemy::initComponents(sf::Texture& texture_sheet)
 }
 
 //Constructors / Destructors
-Enemy::Enemy(float x, float y, sf::Texture& texture_sheet, Player* player) :
+Enemy::Enemy(float x, float y, sf::Texture& texture_sheet, Player* player, const std::string configFile) :
 	player(player)
 {
 	this->initVariables();
-	this->initComponents(texture_sheet);
+	this->initComponents(texture_sheet, configFile);
 
 	this->setPosition(x, y);
 

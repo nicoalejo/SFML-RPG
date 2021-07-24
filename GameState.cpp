@@ -53,7 +53,8 @@ void GameState::initMap()
 
 void GameState::initEnemies()
 {
-	this->enemy = new Enemy(1024, 500, this->textures["ENEMY_SHEET"], player);
+	this->enemies.push_back(new Enemy(1024, 500, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini")));
+	//this->enemies.push_back(new Enemy(1024, 700, this->textures["ENEMY_SHEET"], player));
 }
 
 //Constructor / Destructor
@@ -71,7 +72,10 @@ GameState::~GameState()
 {
 	delete this->player;
 	delete this->newMap;
-	delete this->enemy;
+	for (auto enemy : enemies)
+	{
+		delete enemy;
+	}	
 }
 
 void GameState::updateInput(const float& dt)
@@ -98,7 +102,11 @@ void GameState::Update(const float& dt)
 	this->updateMousePosition();
 	this->updateInput(dt);
 	this->player->Update(dt);
-	this->enemy->Update(dt);
+	for (auto enemy : enemies)
+	{
+		enemy->Update(dt);
+	}	
+	//this->enemy->Update(dt);
 }
 
 void GameState::Render(sf::RenderTarget* target)
@@ -110,5 +118,8 @@ void GameState::Render(sf::RenderTarget* target)
 
 	this->player->Render(*target);
 	
-	this->enemy->Render(*target);
+	for (auto enemy : enemies)
+	{
+		enemy->Render(*target);
+	}
 }

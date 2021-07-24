@@ -1,13 +1,15 @@
 #pragma once
 #include "State.h"
 #include "MapGenerator.h"
+#include <list>
 
 class GameState : public State
 {
 private:	
 	Player* player;
 	MapGenerator* newMap;
-	Enemy* enemy;
+	//Enemy* enemy;
+	std::list<Enemy*> enemies;
 
 	//Initializer Functions
 	void initKeybinds();

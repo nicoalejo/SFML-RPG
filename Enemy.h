@@ -11,13 +11,14 @@ class Enemy :
         float walkVelocity;
         bool attacking;
         Player* player;
+        std::string* configFile;
 
         //Initializer Functions
         void initVariables();
-        void initComponents(sf::Texture& texture_sheet);
+        void initComponents(sf::Texture& texture_sheet, std::string configFile);
 
     public:
-        Enemy(float x, float y, sf::Texture& texture_sheet, Player* player);
+        Enemy(float x, float y, sf::Texture& texture_sheet, Player* player, std::string configFile);
         virtual ~Enemy();
 
         //Functions   
