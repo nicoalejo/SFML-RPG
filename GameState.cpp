@@ -21,6 +21,9 @@ void GameState::initTextures()
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/enemy_walk_128_3.png")) {
 		throw "ERROR::GAME_STATE::COULD NOT LOAD PLAYER TEXTURE";
 	}
+	if (!this->textures["ENEMY_SHEET"].loadFromFile("Resources/Images/Sprites/Player/enemy_walk_128_3.png")) {
+		throw "ERROR::GAME_STATE::COULD NOT LOAD PLAYER TEXTURE";
+	}
 }
 
 void GameState::initPlayers()
@@ -48,6 +51,11 @@ void GameState::initMap()
 		throw "ERROR_MAPGENERATOR::UNABLE_TO_LOAD_MAP";
 }
 
+void GameState::initEnemies()
+{
+	this->enemy = new Enemy(1024, 500, this->textures["ENEMY_SHEET"], player);
+}
+
 //Constructor / Destructor
 GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
 	:State(window, supportedKeys, states)
@@ -56,12 +64,14 @@ GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* suppo
 	this->initTextures();
 	this->initMap();
 	this->initPlayers();
+	this->initEnemies();
 }
 
 GameState::~GameState()
 {
 	delete this->player;
 	delete this->newMap;
+	delete this->enemy;
 }
 
 void GameState::updateInput(const float& dt)
@@ -85,6 +95,7 @@ void GameState::Update(const float& dt)
 	this->updateMousePosition();
 	this->updateInput(dt);
 	this->player->Update(dt);
+	this->enemy->Update(dt);
 }
 
 void GameState::Render(sf::RenderTarget* target)
@@ -96,4 +107,5 @@ void GameState::Render(sf::RenderTarget* target)
 
 	this->player->Render(*target);
 	
+	this->enemy->Render(*target);
 }

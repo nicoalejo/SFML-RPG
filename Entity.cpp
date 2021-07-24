@@ -48,6 +48,11 @@ void Entity::createAudioComponent(const std::string& audio_location)
 }
 //Functions
 
+sf::Vector2f Entity::getPosition()
+{	
+	return sprite.getPosition();
+}
+
 void Entity::setPosition(const float x, const float y)
 {
 	this->sprite.setPosition(x, y);
