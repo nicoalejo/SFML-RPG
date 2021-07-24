@@ -6,6 +6,7 @@ void Player::initVariables()
 	this->sprite_size = 128;
 	this->walkVelocity = 10.f;
 	this->attacking = false;
+	this->oneAttack = false;
 }
 
 void Player::initComponents(sf::Texture& texture_sheet)
@@ -72,6 +73,11 @@ Player::Player(float x, float y, sf::Texture& texture_sheet)
 	this->animationComponent->addAnimation("ATTACK_UP", 10.f, 0, 15, 7, 15, sprite_size, sprite_size);
 }
 
+bool& Player::isAttacking()
+{
+	return oneAttack;
+}
+
 Player::~Player()
 {
 }
@@ -81,9 +87,10 @@ Player::~Player()
 void Player::updateAttack()
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-		this->attacking = true;	
+		this->attacking = true;			
 		if (this->audioComponent->getSound().getStatus() == audioComponent->getSound().Stopped)
 			this->audioComponent->playSound();
+		
 	}
 }
 
@@ -93,6 +100,7 @@ bool Player::checkAndPlayAttackAnimation(const float& dt, const std::string keyM
 	if (this->animationComponent->checkCurrentAnimation(keyMovement) ||
 		this->animationComponent->checkCurrentAnimation(keyAttack)) {
 		if (this->animationComponent->play(keyAttack, dt, true)) {
+			this->oneAttack = true;
 			this->attacking = false;			
 		}			
 		return true;
@@ -109,11 +117,6 @@ void Player::attackAnimation(const float& dt)
 						checkAndPlayAttackAnimation(dt, "WALK_DOWN", "ATTACK_DOWN");	
 	}
 
-}
-
-AttributeComponent* Player::getAttributeComponent()
-{
-	return attributeComponent;
 }
 
 void Player::updateAnimation(const float& dt)

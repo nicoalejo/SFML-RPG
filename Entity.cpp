@@ -53,6 +53,11 @@ void Entity::createAttributeComponent(const int health, const int attack, const 
 }
 //Functions
 
+AttributeComponent* Entity::getAttributeComponent()
+{
+	return attributeComponent;
+}
+
 float Entity::calculateDistancePlayer(const sf::Vector2f& source)
 {
 	float distx = source.x - sprite.getPosition().x;

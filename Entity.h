@@ -34,6 +34,7 @@ public:
 
 	//Functions
 
+	AttributeComponent* getAttributeComponent();
 	float calculateDistancePlayer(const sf::Vector2f& source);
 	sf::Vector2f normalize(const sf::Vector2f& source);
 	virtual sf::Vector2f getPosition();

@@ -11,7 +11,6 @@ class Enemy :
         float walkVelocity;
         bool attacking;
         Player* player;
-        std::string* configFile;
 
         //Initializer Functions
         void initVariables();
@@ -22,6 +21,7 @@ class Enemy :
         virtual ~Enemy();
 
         //Functions   
+        void isAttacked();
         void updateAttack(const float& dt);
         bool checkAndPlayAttackAnimation(const float& dt, const std::string keyMovement,
             const std::string keyAttack);

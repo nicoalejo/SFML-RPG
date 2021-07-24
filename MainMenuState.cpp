@@ -62,7 +62,7 @@ void MainMenuState::initButtons()
 void MainMenuState::initMusic()
 {
 	if (!this->backgroundMusic.openFromFile("Resources/Sounds/Music/intro.ogg"))
-		throw "ERROR::MAINMENUSTATE::UNABLE_TO_LOAD_BACKGROUND_MUSIC";	
+		throw "ERROR::MAINMENUSTATE::UNABLE_TO_LOAD_BACKGROUND_MUSIC";
 
 }
 
@@ -73,12 +73,12 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::map<std::string, int
 	this->initBackground();
 	this->initFonts();
 	this->initKeybinds();
-	this->initButtons();	
+	this->initButtons();
 	this->initMusic();
 }
 
 MainMenuState::~MainMenuState()
-{	
+{
 	for (auto it = this->buttons.begin(); it != this->buttons.end(); ++it) {
 		delete it->second;
 	}
@@ -93,8 +93,8 @@ void MainMenuState::playMusic()
 }
 
 void MainMenuState::updateInput(const float& dt)
-{	
-		
+{
+
 }
 
 void MainMenuState::updateButtons()
@@ -108,28 +108,36 @@ void MainMenuState::updateButtons()
 	//New game
 	if (this->buttons["GAME_STATE"]->isPressed()) {
 		backgroundMusic.stop();
-		this->states->push(new GameState(this->window, this->supportedKeys, this->states));		
+		gameover = 0;
+		this->states->push(new GameState(this->window, this->supportedKeys, this->states));
 	}
-	
+
 	//Editor State
 	if (this->buttons["EDITOR_STATE"]->isPressed()) {
+		gameover = 0;
 		this->states->push(new EditorState(this->window, this->supportedKeys, this->states));
-	}	
+	}
 
 	//Quit the game
 	if (this->buttons["EXIT_STATE"]->isPressed()) {
+		gameover = 0;
 		this->endState();
 	}
 }
 
 void MainMenuState::Update(const float& dt)
-{
-	this->playMusic();
-	this->updateMousePosition();
-	this->updateInput(dt);
-
-	this->updateButtons();	
-}	
+{	
+	if (gameover != 0) {
+		backgroundMusic.stop();
+		this->states->push(new GameOver(this->window, this->supportedKeys, this->states));
+	}
+	else {
+		this->playMusic();
+		this->updateMousePosition();
+		this->updateInput(dt);
+		this->updateButtons();
+	}	
+}
 
 void MainMenuState::renderButtons(sf::RenderTarget& target)
 {
@@ -144,7 +152,7 @@ void MainMenuState::Render(sf::RenderTarget* target)
 	if (!target)
 		target = this->window;
 
-	target->draw(this->background);	
+	target->draw(this->background);
 
 	this->renderButtons(*target);
 

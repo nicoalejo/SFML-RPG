@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include <list>
 
 class Player :
     public Entity
@@ -9,6 +10,7 @@ private:
     int sprite_size;
     float walkVelocity;
     bool attacking;
+    bool oneAttack;
     sf::Text healthText;
     sf::Font font;
 
@@ -20,9 +22,10 @@ private:
 public:
     Player(float x, float y, sf::Texture& texture_sheet);
     virtual ~Player();
-
-    AttributeComponent* getAttributeComponent();
     
+    //Accesors
+    bool& isAttacking();
+
     //Functions   
 
     void updateUI();

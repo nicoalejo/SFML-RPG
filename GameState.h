@@ -1,6 +1,7 @@
 #pragma once
 #include "State.h"
 #include "MapGenerator.h"
+#include "GameOver.h"
 #include <list>
 
 class GameState : public State
@@ -8,7 +9,6 @@ class GameState : public State
 private:	
 	Player* player;
 	MapGenerator* newMap;
-	//Enemy* enemy;
 	std::list<Enemy*> enemies;
 
 	//Initializer Functions
@@ -22,6 +22,8 @@ public:
 	virtual ~GameState();
 
 	//Functions
+
+	void updateEnemies(const float& dt);
 	void updateInput(const float& dt);
 	void Update(const float& dt);
 	void Render(sf::RenderTarget* target = nullptr);

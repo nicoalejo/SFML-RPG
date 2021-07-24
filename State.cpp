@@ -1,5 +1,7 @@
 #include "State.h"
 
+int State::gameover = 0;
+
 State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
 {
 	this->window = window;
@@ -28,4 +30,8 @@ void State::updateMousePosition()
 	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
 	this->mousePosView = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 
+}
+
+void State::Render(sf::RenderTarget* target)
+{
 }

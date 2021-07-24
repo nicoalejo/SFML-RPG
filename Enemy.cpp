@@ -35,7 +35,7 @@ void Enemy::initComponents(sf::Texture& texture_sheet, std::string configFile)
 }
 
 //Constructors / Destructors
-Enemy::Enemy(float x, float y, sf::Texture& texture_sheet, Player* player, const std::string configFile) :
+Enemy::Enemy(float x, float y, sf::Texture& texture_sheet, Player* player, std::string configFile) :
 	player(player)
 {
 	this->initVariables();
@@ -65,11 +65,23 @@ Enemy::~Enemy()
 
 //Functions
 
+void Enemy::isAttacked()
+{	
+	if (this->player->isAttacking()) {
+		this->player->isAttacking() = false;
+		float distance = calculateDistancePlayer(this->player->getPosition());
+		if (distance < 150.f){
+			this->attributeComponent->reduceHealth(this->player->getAttributeComponent()->getAttack());
+			std::cout << this->attributeComponent->getCurrentHP();
+		}
+	}	 
+}
+
 void Enemy::updateAttack(const float& dt)
 {			
-	sf::Vector2f direction = normalize(player->getPosition() - this->sprite.getPosition());
+	sf::Vector2f direction = normalize(this->player->getPosition() - this->sprite.getPosition());
 
-	float distance = calculateDistancePlayer(player->getPosition());
+	float distance = calculateDistancePlayer(this->player->getPosition());
 	if (distance < 300.f && distance > 100.f)
 		this->movementComponent->move(direction.x, direction.y, dt);
 	else if (distance <= 100.f)
@@ -128,6 +140,8 @@ void Enemy::Update(const float& dt)
 	this->movementComponent->Update(dt);
 
 	this->updateAttack(dt);
+
+	this->isAttacked();
 
 	this->updateAnimation(dt);
 

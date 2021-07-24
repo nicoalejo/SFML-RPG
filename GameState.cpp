@@ -78,6 +78,28 @@ GameState::~GameState()
 	}	
 }
 
+void GameState::updateEnemies(const float& dt)
+{
+	for (auto it = this->enemies.begin(); it != enemies.end();)
+	{
+		if ((*it)->getAttributeComponent()->isDead()) {
+			it = enemies.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+	if (!enemies.empty())
+		for (auto enemy : this->enemies)
+		{
+			enemy->Update(dt);
+		}
+	else {
+		gameover = 2;
+		this->endState();
+	}
+}
+
 void GameState::updateInput(const float& dt)
 {
 	//Player Input
@@ -96,17 +118,18 @@ void GameState::updateInput(const float& dt)
 
 void GameState::Update(const float& dt)
 {
-	if (player->getAttributeComponent()->isDead())
-		std::cout << "Muerto" << "\n";
-
-	this->updateMousePosition();
-	this->updateInput(dt);
-	this->player->Update(dt);
-	for (auto enemy : enemies)
-	{
-		enemy->Update(dt);
-	}	
-	//this->enemy->Update(dt);
+	if (player->getAttributeComponent()->isDead()) {		
+		gameover = 1;
+		this->endState();
+	}		
+	else {
+		this->updateMousePosition();
+		this->updateInput(dt);
+		this->player->Update(dt);
+		this->updateEnemies(dt);
+	
+		
+	}
 }
 
 void GameState::Render(sf::RenderTarget* target)
