@@ -3,6 +3,8 @@
 //Initializar Functions
 void MainMenuState::initVariables()
 {
+	if(HSM->GetScore(1) == NULL)
+		HSM->AddScore("A", 0);
 }
 
 void MainMenuState::initBackground()

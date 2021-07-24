@@ -14,7 +14,6 @@ private:
 	int maxHP;
 	int currentHP;
 	int attack;
-	int score = 0;
 	int points;
 	bool dead;
 
@@ -29,7 +28,6 @@ public:
 	int getMaxHP();
 	int getCurrentHP();
 	int getAttack();
-	int getScore();
 	int getPoints();
 	bool isDead();
 

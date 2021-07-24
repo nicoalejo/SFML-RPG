@@ -72,7 +72,6 @@ void Enemy::isAttacked()
 		float distance = calculateDistancePlayer(this->player->getPosition());
 		if (distance < 150.f){
 			this->attributeComponent->reduceHealth(this->player->getAttributeComponent()->getAttack());
-			std::cout << this->attributeComponent->getCurrentHP();
 		}
 	}	 
 }

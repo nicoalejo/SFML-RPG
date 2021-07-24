@@ -28,11 +28,6 @@ int AttributeComponent::getAttack()
 	return this->attack;
 }
 
-int AttributeComponent::getScore()
-{
-	return this->score;
-}
-
 int AttributeComponent::getPoints()
 {
 	return this->points;

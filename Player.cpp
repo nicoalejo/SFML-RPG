@@ -7,6 +7,7 @@ void Player::initVariables()
 	this->walkVelocity = 10.f;
 	this->attacking = false;
 	this->oneAttack = false;
+	this->score = 0;
 }
 
 void Player::initComponents(sf::Texture& texture_sheet)
@@ -75,7 +76,15 @@ Player::Player(float x, float y, sf::Texture& texture_sheet)
 
 bool& Player::isAttacking()
 {
-	return oneAttack;
+	return this->oneAttack;
+}
+
+void Player::setScore(const int addScore)
+{
+	this->score += addScore;
+}
+int& Player::getScore() {
+	return this->score;
 }
 
 Player::~Player()
@@ -88,7 +97,7 @@ void Player::updateAttack()
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 		this->attacking = true;			
-		if (this->audioComponent->getSound().getStatus() == audioComponent->getSound().Stopped)
+		if (this->audioComponent->getSound().getStatus() == this->audioComponent->getSound().Stopped)
 			this->audioComponent->playSound();
 		
 	}
@@ -142,7 +151,6 @@ void Player::updateUI()
 	this->healthText.setString("HP: " + std::to_string(attributeComponent->getCurrentHP())
 		+ "/" + std::to_string(attributeComponent->getMaxHP()));
 }
-
 
 void Player::Update(const float& dt)
 {

@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "Enemy.h"
+#include <HighscoreManager.h>
 
 class State
 {
@@ -27,6 +28,7 @@ protected:
 
 public:
 	static int gameover;
+	static HighscoreManager* HSM;
 
 	State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
 	virtual ~State();

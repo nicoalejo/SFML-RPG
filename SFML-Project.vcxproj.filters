@@ -78,6 +78,9 @@
     <ClCompile Include="GameOver.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="GameOver.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUI.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,10 +9,14 @@ private:
     //Variables
     int sprite_size;
     float walkVelocity;
+
     bool attacking;
     bool oneAttack;
+
     sf::Text healthText;
     sf::Font font;
+    
+    int score;
 
     //Initializer Functions
     void initVariables();
@@ -25,9 +29,11 @@ public:
     
     //Accesors
     bool& isAttacking();
+    void setScore(const int addScore);
+    int& getScore();
 
     //Functions   
-
+    
     void updateUI();
     void updateAttack();
     bool checkAndPlayAttackAnimation(const float& dt, const std::string keyMovement, 

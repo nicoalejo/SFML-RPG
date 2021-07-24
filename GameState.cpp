@@ -54,7 +54,26 @@ void GameState::initMap()
 void GameState::initEnemies()
 {
 	this->enemies.push_back(new Enemy(1024, 500, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini")));
-	//this->enemies.push_back(new Enemy(1024, 700, this->textures["ENEMY_SHEET"], player));
+	this->enemies.push_back(new Enemy(1024, 700, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini")));
+}
+
+void GameState::initUI()
+{
+	if (!this->font.loadFromFile("Fonts/Enchanted-Land.otf")) {
+		throw("ERROR::MAINMENUSTATE::Could not load font");
+	}
+
+	this->highscoreText.setFont(this->font);
+	this->highscoreText.setString("HighScore: " + std::to_string(HSM->GetScore(1)->GetScore()));		
+	this->highscoreText.setFillColor(sf::Color::Cyan);
+	this->highscoreText.setCharacterSize(50);
+	this->highscoreText.setPosition(900, 1015);
+
+	this->currentscoreText.setFont(this->font);
+	this->currentscoreText.setString("Current Score: " + std::to_string(player->getScore()));
+	this->currentscoreText.setFillColor(sf::Color::Red);
+	this->currentscoreText.setCharacterSize(50);
+	this->currentscoreText.setPosition(1500, 1015);
 }
 
 //Constructor / Destructor
@@ -66,6 +85,9 @@ GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* suppo
 	this->initMap();
 	this->initPlayers();
 	this->initEnemies();
+	this->initUI();
+
+	std::cout << HSM->GetScore(1)->GetScore();
 }
 
 GameState::~GameState()
@@ -78,12 +100,26 @@ GameState::~GameState()
 	}	
 }
 
+//Functions
+
+void GameState::updateCurrentScore()
+{
+	this->currentscoreText.setString("Current Score: " + std::to_string(player->getScore()));
+}
+
+void GameState::updateHighScore()
+{
+	if (this->HSM->GetScore(1) == NULL || this->HSM->GetScore(1)->GetScore() < player->getScore())
+		this->HSM->AddScore("AAA", player->getScore());
+}
+
 void GameState::updateEnemies(const float& dt)
 {
-	for (auto it = this->enemies.begin(); it != enemies.end();)
+	for (auto it = this->enemies.begin(); it != this->enemies.end();)
 	{
 		if ((*it)->getAttributeComponent()->isDead()) {
-			it = enemies.erase(it);
+			this->player->setScore((*it)->getAttributeComponent()->getPoints());
+			it = this->enemies.erase(it);			
 		}
 		else {
 			++it;
@@ -96,6 +132,7 @@ void GameState::updateEnemies(const float& dt)
 		}
 	else {
 		gameover = 2;
+		updateHighScore();
 		this->endState();
 	}
 }
@@ -120,6 +157,7 @@ void GameState::Update(const float& dt)
 {
 	if (player->getAttributeComponent()->isDead()) {		
 		gameover = 1;
+		updateHighScore();
 		this->endState();
 	}		
 	else {
@@ -127,8 +165,7 @@ void GameState::Update(const float& dt)
 		this->updateInput(dt);
 		this->player->Update(dt);
 		this->updateEnemies(dt);
-	
-		
+		this->updateCurrentScore();
 	}
 }
 
@@ -138,6 +175,9 @@ void GameState::Render(sf::RenderTarget* target)
 		target = this->window;
 
 	this->newMap->Render(*target);
+
+	target->draw(this->highscoreText);
+	target->draw(this->currentscoreText);
 
 	this->player->Render(*target);
 	
