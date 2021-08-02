@@ -24,7 +24,7 @@ private:
 	void initUI();
 
 public:
-	GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+	GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::vector<State*>* states);
 	virtual ~GameState();
 	
 	//Functions

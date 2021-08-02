@@ -32,11 +32,19 @@ void GameOver::initKeybinds()
 
 }
 
-GameOver::GameOver(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
+void GameOver::resetGameState()
+{
+	//Erasing the GameState
+	states->erase(states->end() - 1);
+}
+
+GameOver::GameOver(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::vector<State*>* states)
 	:State(window, supportedKeys, states)
 {
 	this->initBackground();
 	this->initKeybinds();
+	this->resetGameState();
+
 }
 
 GameOver::~GameOver()
@@ -47,7 +55,6 @@ GameOver::~GameOver()
 void GameOver::updateInput(const float& dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE")))) {
-		gameover = 0;
 		this->endState();
 	}
 		

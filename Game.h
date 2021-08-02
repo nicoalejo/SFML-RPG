@@ -15,7 +15,7 @@ private:
 	sf::Clock dtClock;
 	float dt;
 
-	std::stack<State*> states;
+	std::vector<State*> states;
 
 	std::map<std::string, int> supportedKeys;
 

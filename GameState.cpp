@@ -27,7 +27,7 @@ void GameState::initTextures()
 }
 
 void GameState::initPlayers()
-{
+{	
 	//Send position x,y and texture
 	this->player = new Player(0,0, this->textures["PLAYER_SHEET"]);
 }
@@ -77,7 +77,7 @@ void GameState::initUI()
 }
 
 //Constructor / Destructor
-GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
+GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::vector<State*>* states)
 	:State(window, supportedKeys, states)
 {
 	this->initKeybinds();
@@ -132,6 +132,7 @@ void GameState::updateEnemies(const float& dt)
 		}
 	else {
 		gameover = 2;
+		states->push_back(new GameOver(this->window, this->supportedKeys, this->states));
 		updateHighScore();
 		this->endState();
 	}
@@ -155,10 +156,10 @@ void GameState::updateInput(const float& dt)
 
 void GameState::Update(const float& dt)
 {
-	if (player->getAttributeComponent()->isDead()) {		
+	if (player->getAttributeComponent()->isDead()) {
 		gameover = 1;
-		updateHighScore();
-		this->endState();
+		updateHighScore();	
+		states->push_back(new GameOver(this->window, this->supportedKeys, this->states));
 	}		
 	else {
 		this->updateMousePosition();

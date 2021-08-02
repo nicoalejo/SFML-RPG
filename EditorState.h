@@ -19,7 +19,7 @@ private:
 	void initButtons();
 
 public:
-	EditorState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+	EditorState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::vector<State*>* states);
 	virtual ~EditorState();
 
 	//Functions

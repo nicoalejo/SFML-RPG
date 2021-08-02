@@ -37,7 +37,7 @@ void EditorState::initButtons()
 
 }
 
-EditorState::EditorState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
+EditorState::EditorState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::vector<State*>* states)
 	:State(window, supportedKeys, states)
 {
 	this->initVariables();

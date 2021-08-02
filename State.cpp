@@ -3,7 +3,7 @@
 int State::gameover = 0;
 HighscoreManager* State::HSM = new HighscoreManager(3);
 
-State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
+State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::vector<State*>* states)
 {
 	this->window = window;
 	this->supportedKeys = supportedKeys;

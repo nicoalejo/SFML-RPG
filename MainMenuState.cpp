@@ -3,7 +3,7 @@
 //Initializar Functions
 void MainMenuState::initVariables()
 {
-	if(HSM->GetScore(1) == NULL)
+	if (HSM->GetScore(1) == NULL)
 		HSM->AddScore("A", 0);
 }
 
@@ -68,7 +68,7 @@ void MainMenuState::initMusic()
 
 }
 
-MainMenuState::MainMenuState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
+MainMenuState::MainMenuState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::vector<State*>* states)
 	:State(window, supportedKeys, states)
 {
 	this->initVariables();
@@ -110,35 +110,26 @@ void MainMenuState::updateButtons()
 	//New game
 	if (this->buttons["GAME_STATE"]->isPressed()) {
 		backgroundMusic.stop();
-		gameover = 0;
-		this->states->push(new GameState(this->window, this->supportedKeys, this->states));
+		this->states->push_back(new GameState(this->window, this->supportedKeys, this->states));
 	}
 
 	//Editor State
 	if (this->buttons["EDITOR_STATE"]->isPressed()) {
-		gameover = 0;
-		this->states->push(new EditorState(this->window, this->supportedKeys, this->states));
+		this->states->push_back(new EditorState(this->window, this->supportedKeys, this->states));
 	}
 
 	//Quit the game
 	if (this->buttons["EXIT_STATE"]->isPressed()) {
-		gameover = 0;
 		this->endState();
 	}
 }
 
 void MainMenuState::Update(const float& dt)
-{	
-	if (gameover != 0) {
-		backgroundMusic.stop();
-		this->states->push(new GameOver(this->window, this->supportedKeys, this->states));
-	}
-	else {
-		this->playMusic();
-		this->updateMousePosition();
-		this->updateInput(dt);
-		this->updateButtons();
-	}	
+{
+	this->playMusic();
+	this->updateMousePosition();
+	this->updateInput(dt);
+	this->updateButtons();
 }
 
 void MainMenuState::renderButtons(sf::RenderTarget& target)

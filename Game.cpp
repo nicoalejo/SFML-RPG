@@ -59,7 +59,7 @@ void Game::initKeys()
 
 void Game::initStates()
 {
-    this->states.push(new MainMenuState(this->window, &this->supportedKeys, &this->states));
+    this->states.push_back(new MainMenuState(this->window, &this->supportedKeys, &this->states));
 }
 
 //Constructors/Destructors
@@ -73,13 +73,12 @@ Game::Game()
 
 Game::~Game()
 {
-	delete this->window;
-
-    while (!this->states.empty()) {
-        delete this->states.top();
-        this->states.pop();
+	delete this->window;    
+    for (int i = 0; i < this->states.size(); i++)
+    {
+        delete this->states[i];
     }
-        
+    this->states.clear();
 }
 
 //Functions
@@ -113,13 +112,12 @@ void Game::Update()
     this->UpdateSFMLEvents();
 
     if (!this->states.empty()) {
-        this->states.top()->Update(this->dt);
+        this->states.back()->Update(this->dt);
 
-        if (this->states.top()->getQuit()) {
+        if (this->states.back()->getQuit()) {
             
-            this->states.top()->endState();
-            delete this->states.top();
-            this->states.pop();
+            this->states.back()->endState();
+            this->states.pop_back();
         }
     }
     //Application End
@@ -135,7 +133,7 @@ void Game::Render()
 
     //Render items
     if (!this->states.empty())
-        this->states.top()->Render();
+        this->states.back()->Render();
 
     this->window->display();
 }
