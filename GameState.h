@@ -11,7 +11,8 @@ private:
 	MapGenerator* newMap;
 	std::vector<sf::FloatRect> unwalkable;
 	sf::Vector2f oldposition;
-	std::list<Enemy*> enemies;
+	std::vector<Enemy*> enemies;
+	std::vector<sf::Vector2f> enemiesOldPositions;
 
 	sf::Text highscoreText;
 	sf::Text currentscoreText;
@@ -31,7 +32,9 @@ public:
 	
 	//Functions
 
+	void updateOldPositions();
 	void checkCollisionPlayer();
+	void checkCollisionBetweenEnemies();
 	void updateCurrentScore();
 	void updateHighScore();
 	void updateEnemies(const float& dt);

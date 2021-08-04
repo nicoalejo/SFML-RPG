@@ -103,6 +103,6 @@ void MovementComponent::Update(const float& dt)
 			this->velocity.y = 0;
 	}
 
-	//Final Move
+	//Final Move	
 	this->sprite.move(this->velocity * dt);
 }

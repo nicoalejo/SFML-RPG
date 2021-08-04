@@ -17,7 +17,7 @@ void GameState::initKeybinds()
 }
 
 void GameState::initTextures()
-{		
+{
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/necromancer_spritesheet.png")) {
 		throw "ERROR::GAME_STATE::COULD NOT LOAD PLAYER TEXTURE";
 	}
@@ -27,9 +27,9 @@ void GameState::initTextures()
 }
 
 void GameState::initPlayers()
-{	
+{
 	//Send position x,y and texture
-	this->player = new Player(100,100, this->textures["PLAYER_SHEET"], unwalkable);
+	this->player = new Player(100, 100, this->textures["PLAYER_SHEET"], unwalkable);
 }
 
 void GameState::initMap()
@@ -37,24 +37,24 @@ void GameState::initMap()
 	this->newMap = new MapGenerator();
 	const int level[] =
 	{
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 
-		1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 
-		0, 1, 0, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 0, 0, 
-		0, 1, 1, 0, 2, 2, 2, 0, 0, 0, 1, 1, 1, 2, 0, 
-		0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 
-		2, 0, 1, 0, 2, 0, 0, 0, 2, 0, 1, 1, 1, 1, 1, 
-		0, 0, 1, 0, 2, 2, 0, 2, 0, 0, 0, 0, 1, 1, 1, 
+		0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0,
+		0, 1, 0, 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2,
+		0, 1, 0, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 0, 0,
+		0, 1, 1, 0, 2, 2, 2, 0, 0, 0, 1, 1, 1, 2, 0,
+		0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2,
+		2, 0, 1, 0, 2, 0, 0, 0, 2, 0, 1, 1, 1, 1, 1,
+		0, 0, 1, 0, 2, 2, 0, 2, 0, 0, 0, 0, 1, 1, 1,
 	};
-	
-	if (!this->newMap->load("Resources/Images/map/tiles_128.png", sf::Vector2u(128, 128), level, 15, 8,unwalkable))
+
+	if (!this->newMap->load("Resources/Images/map/tiles_128.png", sf::Vector2u(128, 128), level, 15, 8, unwalkable))
 		throw "ERROR_MAPGENERATOR::UNABLE_TO_LOAD_MAP";
 }
 
 void GameState::initEnemies()
 {
-	this->enemies.push_back(new Enemy(1024, 500, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini"),unwalkable));
-	this->enemies.push_back(new Enemy(1024, 700, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini"),unwalkable));
+	this->enemies.push_back(new Enemy(1024, 500, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini"), unwalkable));
+	this->enemies.push_back(new Enemy(1024, 700, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini"), unwalkable));
 }
 
 void GameState::initUI()
@@ -64,7 +64,7 @@ void GameState::initUI()
 	}
 
 	this->highscoreText.setFont(this->font);
-	this->highscoreText.setString("HighScore: " + std::to_string(HSM->GetScore(1)->GetScore()));		
+	this->highscoreText.setString("HighScore: " + std::to_string(HSM->GetScore(1)->GetScore()));
 	this->highscoreText.setFillColor(sf::Color::Cyan);
 	this->highscoreText.setCharacterSize(50);
 	this->highscoreText.setPosition(900, 1015);
@@ -97,20 +97,72 @@ GameState::~GameState()
 	for (auto enemy : enemies)
 	{
 		delete enemy;
-	}	
+	}
 }
 
 //Functions
 
+void GameState::updateOldPositions()
+{
+	enemies.clear();
+	for (auto it = enemies.begin(); it != enemies.end(); ++it)
+	{
+		enemiesOldPositions.push_back((*(it))->getPosition());
+	}
+}
+
 void GameState::checkCollisionPlayer()
 {
-//get hitbox position and not enemy
 	for (auto it = enemies.begin(); it != enemies.end(); ++it)
-	{				
-		if (this->player->hitboxComponent->checkIntersect(
-			(*it)->hitboxComponent->getHitbox().getGlobalBounds())) {
+	{
+		if (this->player->hitboxComponent->checkIntersect((*it)->hitboxComponent->getHitbox().getGlobalBounds())){
+			sf::FloatRect playerHitbox = this->player->hitboxComponent->getHitbox().getGlobalBounds();
+			sf::FloatRect enemyHitbox = (*it)->hitboxComponent->getHitbox().getGlobalBounds();
+			if (playerHitbox.top > enemyHitbox.top) {
+				oldposition.y += 5;
+			}
+			else {
+				oldposition.y += -5;
+			}
+			if (playerHitbox.left > enemyHitbox.left) {
+				oldposition.x += 5;
+			}
+			else {
+				oldposition.x += -5;
+			}			
 			this->player->setPosition(oldposition.x, oldposition.y);
 		}
+	}
+}
+
+void GameState::checkCollisionBetweenEnemies()
+{
+	for (int i = 0; i < enemies.size()-1; i++)
+	{		
+		for (int j = i + 1; j < enemies.size(); j++) {
+			if (this->enemies[i]->hitboxComponent->checkIntersect(this->enemies[j]->hitboxComponent->getHitbox().getGlobalBounds())) {
+				sf::FloatRect enemy1 = this->enemies[i]->hitboxComponent->getHitbox().getGlobalBounds();
+				sf::FloatRect enemy2 = this->enemies[j]->hitboxComponent->getHitbox().getGlobalBounds();
+				if (enemy1.top > enemy2.top) {
+					enemiesOldPositions[i].y += 5;
+					enemiesOldPositions[j].y += -5;
+				}
+				else {
+					enemiesOldPositions[i].y += -5;
+					enemiesOldPositions[j].y += 5;
+				}
+				if (enemy1.left > enemy2.left) {
+					enemiesOldPositions[i].x += 5;
+					enemiesOldPositions[j].x += -5;
+				}
+				else {
+					enemiesOldPositions[i].x += -5;
+					enemiesOldPositions[j].x += 5;
+				}
+				this->enemies[i]->setPosition(enemiesOldPositions[i]);
+				this->enemies[j]->setPosition(enemiesOldPositions[j]);
+			}				
+		}		
 	}
 }
 
@@ -131,17 +183,23 @@ void GameState::updateEnemies(const float& dt)
 	{
 		if ((*it)->getAttributeComponent()->isDead()) {
 			this->player->setScore((*it)->getAttributeComponent()->getPoints());
-			it = this->enemies.erase(it);			
+			it = this->enemies.erase(it);
 		}
 		else {
 			++it;
 		}
 	}
-	if (!enemies.empty())
+	if (!enemies.empty()){				
+		enemiesOldPositions.clear();
 		for (auto enemy : this->enemies)
 		{
+			enemiesOldPositions.push_back(enemy->getPosition());
 			enemy->Update(dt);
 		}
+
+		this->checkCollisionPlayer();
+		this->checkCollisionBetweenEnemies();
+	}
 	else {
 		gameover = 2;
 		states->push_back(new GameOver(this->window, this->supportedKeys, this->states));
@@ -170,20 +228,21 @@ void GameState::Update(const float& dt)
 {
 	if (player->getAttributeComponent()->isDead()) {
 		gameover = 1;
-		updateHighScore();	
+		updateHighScore();
 		states->push_back(new GameOver(this->window, this->supportedKeys, this->states));
-	}		
+	}
 	else {
-		
-		this->oldposition = player->getPosition();
 
 		this->updateMousePosition();
 		this->updateInput(dt);
+
+		this->oldposition = player->getPosition();
 		this->player->Update(dt);
+	
 		this->updateEnemies(dt);
 		this->updateCurrentScore();
 
-		this->checkCollisionPlayer();
+
 	}
 }
 
@@ -198,7 +257,7 @@ void GameState::Render(sf::RenderTarget* target)
 	target->draw(this->currentscoreText);
 
 	this->player->Render(*target);
-	
+
 	for (auto enemy : enemies)
 	{
 		enemy->Render(*target);

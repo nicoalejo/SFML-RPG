@@ -18,13 +18,14 @@ private:
     
     int score;
     std::vector<sf::FloatRect> unwalkable;
+    sf::Vector2f oldPosition;
 
     //Initializer Functions
     void initVariables();
     void initComponents(sf::Texture& texture_sheet);
     void initUI();
 
-    void checkCollision(sf::Vector2f oldPosition);
+    void checkCollision();
 
 public:
     Player(float x, float y, sf::Texture& texture_sheet, std::vector<sf::FloatRect>& unwalkable);

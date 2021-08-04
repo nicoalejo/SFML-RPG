@@ -81,14 +81,33 @@ bool& Player::isAttacking()
 }
 
 //PRIVATE FUNCTIONS
-void Player::checkCollision(sf::Vector2f oldPosition)
+void Player::checkCollision()
 {
-
 	for (auto it = this->unwalkable.begin(); it != this->unwalkable.end(); ++it)
 	{
 		if (this->hitboxComponent->checkIntersect(*it)) {
-			this->setPosition(oldPosition.x, oldPosition.y);
+			sf::FloatRect playerHitbox = hitboxComponent->getHitbox().getGlobalBounds();
+			if (playerHitbox.top > (*it).top) {
+				oldPosition.y += 1;
+			}
+			else {
+				oldPosition.y += -1;
+			}
+			if (playerHitbox.left > (*it).left) {
+				oldPosition.x += 1;
+			}
+			else {
+				oldPosition.x += -1;
+			}
+			this->setPosition(this->oldPosition.x, this->oldPosition.y);
 		}
+	}
+	float leftBound = this->hitboxComponent->getHitbox().getGlobalBounds().left + hitboxComponent->getHitbox().getGlobalBounds().width;
+	float downBound = this->hitboxComponent->getHitbox().getGlobalBounds().top + hitboxComponent->getHitbox().getGlobalBounds().height;
+	float rightBound = this->hitboxComponent->getHitbox().getGlobalBounds().left;
+	float topBound = this->hitboxComponent->getHitbox().getGlobalBounds().top;
+	if (leftBound >= 1920.f || downBound >= 1000.f || rightBound <= 0 || topBound <= 0) {
+		this->setPosition(this->oldPosition.x, this->oldPosition.y);
 	}
 }
 
@@ -168,7 +187,7 @@ void Player::updateUI()
 
 void Player::Update(const float& dt)
 {		
-	sf::Vector2f oldPosition = this->getPosition();
+	oldPosition = this->getPosition();
 
 	this->movementComponent->Update(dt);
 
@@ -180,7 +199,7 @@ void Player::Update(const float& dt)
 
 	this->updateUI();
 
-	checkCollision(oldPosition);
+	checkCollision();
 
 }
 
