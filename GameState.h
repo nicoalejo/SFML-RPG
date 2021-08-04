@@ -9,6 +9,8 @@ class GameState : public State
 private:	
 	Player* player;
 	MapGenerator* newMap;
+	std::vector<sf::FloatRect> unwalkable;
+	sf::Vector2f oldposition;
 	std::list<Enemy*> enemies;
 
 	sf::Text highscoreText;
@@ -29,6 +31,7 @@ public:
 	
 	//Functions
 
+	void checkCollisionPlayer();
 	void updateCurrentScore();
 	void updateHighScore();
 	void updateEnemies(const float& dt);

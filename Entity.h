@@ -11,15 +11,17 @@ class Entity
 private:
 	void initVariables();
 protected:
+		
+
+public:
 	sf::Sprite sprite;
-	
+
 	HitBoxComponent* hitboxComponent;
 	MovementComponent* movementComponent;
 	AnimationComponent* animationComponent;
 	AudioComponent* audioComponent;
 	AttributeComponent* attributeComponent;
 
-public:
 	Entity();
 	virtual ~Entity();
 

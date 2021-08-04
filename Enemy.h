@@ -11,16 +11,21 @@ class Enemy :
         float walkVelocity;
         bool attacking;
         Player* player;
+        std::vector<sf::FloatRect> unwalkable;
+    
 
         //Initializer Functions
         void initVariables();
         void initComponents(sf::Texture& texture_sheet, std::string configFile);
 
+        void checkCollision(sf::Vector2f oldPosition);
+
     public:
-        Enemy(float x, float y, sf::Texture& texture_sheet, Player* player, std::string configFile);
+        Enemy(float x, float y, sf::Texture& texture_sheet, Player* player, std::string configFile, std::vector<sf::FloatRect>& unwalkable);
         virtual ~Enemy();
 
         //Functions   
+        sf::FloatRect getFloatRect();
         void isAttacked();
         void updateAttack(const float& dt);
         bool checkAndPlayAttackAnimation(const float& dt, const std::string keyMovement,

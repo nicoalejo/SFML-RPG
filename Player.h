@@ -17,14 +17,17 @@ private:
     sf::Font font;
     
     int score;
+    std::vector<sf::FloatRect> unwalkable;
 
     //Initializer Functions
     void initVariables();
     void initComponents(sf::Texture& texture_sheet);
     void initUI();
 
+    void checkCollision(sf::Vector2f oldPosition);
+
 public:
-    Player(float x, float y, sf::Texture& texture_sheet);
+    Player(float x, float y, sf::Texture& texture_sheet, std::vector<sf::FloatRect>& unwalkable);
     virtual ~Player();
     
     //Accesors
@@ -33,7 +36,7 @@ public:
     int& getScore();
 
     //Functions   
-    
+
     void updateUI();
     void updateAttack();
     bool checkAndPlayAttackAnimation(const float& dt, const std::string keyMovement, 

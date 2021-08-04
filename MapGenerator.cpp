@@ -1,8 +1,11 @@
 #include "MapGenerator.h"
+#include <vector>
 
 //Constructors
 MapGenerator::MapGenerator()
 {
+    this->height = 0;
+    this->width = 0;
 }
 
 MapGenerator::~MapGenerator()
@@ -11,10 +14,11 @@ MapGenerator::~MapGenerator()
 
 //Functions
 bool MapGenerator::load(const std::string& tileset, sf::Vector2u tileSize,
-    const int* tiles, int width, int height)
+    const int* tiles, int width, int height, std::vector<sf::FloatRect>& unwalkable)
 {
     this->height = height;
     this->width = width;
+    
 
     if (!m_tileset.loadFromFile(tileset))
         return false;
@@ -31,6 +35,7 @@ bool MapGenerator::load(const std::string& tileset, sf::Vector2u tileSize,
             case 1:
                 this->setTexture(m_tileset, map_sprite[(width * i) + j], sf::IntRect(256, 0, tileSize.x, tileSize.y));
                 this->setPosition(i * tileSize.x, j * tileSize.y, map_sprite[(width * i) + j]);
+                unwalkable.push_back(map_sprite[(width * i) + j].getGlobalBounds());
                 break;
             case 2:
                 this->setTexture(m_tileset, map_sprite[(i * width) + j], sf::IntRect(0, 0, tileSize.x, tileSize.y));
@@ -59,7 +64,6 @@ void MapGenerator::Render(sf::RenderTarget& target)
     {
         target.draw(map_sprite[i]);
     }
-  
 }
 
     

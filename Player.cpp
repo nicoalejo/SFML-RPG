@@ -51,7 +51,8 @@ void Player::initUI()
 }
 
 //Constructors / Destructors
-Player::Player(float x, float y, sf::Texture& texture_sheet)
+Player::Player(float x, float y, sf::Texture& texture_sheet, std::vector<sf::FloatRect>& unwalkable)
+	:unwalkable(unwalkable)
 {
 	this->initVariables();	
 	this->initComponents(texture_sheet);
@@ -78,6 +79,20 @@ bool& Player::isAttacking()
 {
 	return this->oneAttack;
 }
+
+//PRIVATE FUNCTIONS
+void Player::checkCollision(sf::Vector2f oldPosition)
+{
+
+	for (auto it = this->unwalkable.begin(); it != this->unwalkable.end(); ++it)
+	{
+		if (this->hitboxComponent->checkIntersect(*it)) {
+			this->setPosition(oldPosition.x, oldPosition.y);
+		}
+	}
+}
+
+//PUBLIC FUNCTIONS
 
 void Player::setScore(const int addScore)
 {
@@ -145,7 +160,6 @@ void Player::updateAnimation(const float& dt)
 
 }
 
-
 void Player::updateUI() 
 {
 	this->healthText.setString("HP: " + std::to_string(attributeComponent->getCurrentHP())
@@ -153,7 +167,9 @@ void Player::updateUI()
 }
 
 void Player::Update(const float& dt)
-{
+{		
+	sf::Vector2f oldPosition = this->getPosition();
+
 	this->movementComponent->Update(dt);
 
 	this->updateAttack();
@@ -163,6 +179,9 @@ void Player::Update(const float& dt)
 	this->hitboxComponent->Update();
 
 	this->updateUI();
+
+	checkCollision(oldPosition);
+
 }
 
 void Player::Render(sf::RenderTarget& target)

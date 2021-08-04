@@ -23,6 +23,7 @@ public:
 	virtual ~HitBoxComponent();
 
 	//Functions
+	sf::RectangleShape getHitbox();
 	bool checkIntersect(const sf::FloatRect& frect);
 
 	void Update();

@@ -35,8 +35,8 @@ void Enemy::initComponents(sf::Texture& texture_sheet, std::string configFile)
 }
 
 //Constructors / Destructors
-Enemy::Enemy(float x, float y, sf::Texture& texture_sheet, Player* player, std::string configFile) :
-	player(player)
+Enemy::Enemy(float x, float y, sf::Texture& texture_sheet, Player* player, std::string configFile, std::vector<sf::FloatRect>& unwalkable) :
+	player(player), unwalkable(unwalkable)
 {
 	this->initVariables();
 	this->initComponents(texture_sheet, configFile);
@@ -63,7 +63,25 @@ Enemy::~Enemy()
 {
 }
 
+
 //Functions
+void Enemy::checkCollision(sf::Vector2f oldPosition)
+{
+	for (auto it = this->unwalkable.begin(); it != this->unwalkable.end(); ++it)
+	{
+		if (this->hitboxComponent->checkIntersect(*it)) {
+			this->setPosition(oldPosition.x, oldPosition.y);
+		}
+	}	
+	if (this->hitboxComponent->checkIntersect(player->hitboxComponent->getHitbox().getGlobalBounds())) {
+		this->setPosition(oldPosition.x, oldPosition.y);
+	}
+}
+
+sf::FloatRect Enemy::getFloatRect()
+{
+	return sf::FloatRect(this->getPosition().x, this->getPosition().y, 64.f, 64.f);
+}
 
 void Enemy::isAttacked()
 {	
@@ -136,6 +154,8 @@ void Enemy::updateAnimation(const float& dt)
 
 void Enemy::Update(const float& dt)
 {
+	sf::Vector2f oldPosition = this->getPosition();
+
 	this->movementComponent->Update(dt);
 
 	this->updateAttack(dt);
@@ -145,4 +165,6 @@ void Enemy::Update(const float& dt)
 	this->updateAnimation(dt);
 
 	this->hitboxComponent->Update();
+
+	this->checkCollision(oldPosition);
 }

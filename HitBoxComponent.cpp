@@ -15,6 +15,11 @@ HitBoxComponent::~HitBoxComponent()
 {
 }
 
+sf::RectangleShape HitBoxComponent::getHitbox()
+{
+	return hitbox;
+}
+
 //Functions
 bool HitBoxComponent::checkIntersect(const sf::FloatRect& frect)
 {

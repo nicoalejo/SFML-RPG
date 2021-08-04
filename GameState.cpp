@@ -29,7 +29,7 @@ void GameState::initTextures()
 void GameState::initPlayers()
 {	
 	//Send position x,y and texture
-	this->player = new Player(0,0, this->textures["PLAYER_SHEET"]);
+	this->player = new Player(100,100, this->textures["PLAYER_SHEET"], unwalkable);
 }
 
 void GameState::initMap()
@@ -37,8 +37,8 @@ void GameState::initMap()
 	this->newMap = new MapGenerator();
 	const int level[] =
 	{
-		0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-		0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 
 		1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 
 		0, 1, 0, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 0, 0, 
 		0, 1, 1, 0, 2, 2, 2, 0, 0, 0, 1, 1, 1, 2, 0, 
@@ -47,14 +47,14 @@ void GameState::initMap()
 		0, 0, 1, 0, 2, 2, 0, 2, 0, 0, 0, 0, 1, 1, 1, 
 	};
 	
-	if (!this->newMap->load("Resources/Images/map/tiles_128.png", sf::Vector2u(128, 128), level, 15, 8))
+	if (!this->newMap->load("Resources/Images/map/tiles_128.png", sf::Vector2u(128, 128), level, 15, 8,unwalkable))
 		throw "ERROR_MAPGENERATOR::UNABLE_TO_LOAD_MAP";
 }
 
 void GameState::initEnemies()
 {
-	this->enemies.push_back(new Enemy(1024, 500, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini")));
-	this->enemies.push_back(new Enemy(1024, 700, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini")));
+	this->enemies.push_back(new Enemy(1024, 500, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini"),unwalkable));
+	this->enemies.push_back(new Enemy(1024, 700, this->textures["ENEMY_SHEET"], player, std::string("Config/attributes_enemy.ini"),unwalkable));
 }
 
 void GameState::initUI()
@@ -101,6 +101,18 @@ GameState::~GameState()
 }
 
 //Functions
+
+void GameState::checkCollisionPlayer()
+{
+//get hitbox position and not enemy
+	for (auto it = enemies.begin(); it != enemies.end(); ++it)
+	{				
+		if (this->player->hitboxComponent->checkIntersect(
+			(*it)->hitboxComponent->getHitbox().getGlobalBounds())) {
+			this->player->setPosition(oldposition.x, oldposition.y);
+		}
+	}
+}
 
 void GameState::updateCurrentScore()
 {
@@ -162,11 +174,16 @@ void GameState::Update(const float& dt)
 		states->push_back(new GameOver(this->window, this->supportedKeys, this->states));
 	}		
 	else {
+		
+		this->oldposition = player->getPosition();
+
 		this->updateMousePosition();
 		this->updateInput(dt);
 		this->player->Update(dt);
 		this->updateEnemies(dt);
 		this->updateCurrentScore();
+
+		this->checkCollisionPlayer();
 	}
 }
 
